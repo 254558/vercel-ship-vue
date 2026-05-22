@@ -1,0 +1,128 @@
+/* 🔥 Vite + Tailwind v4 官方唯一推荐写法 */
+@import "tailwindcss";
+
+/* ==========================
+   🎨 Geist 字体全套配置
+========================== */
+@font-face {
+  font-family: "GeistSans";
+  src: url("./assets/font/caa3a2e1cccd8315.p.0wgildi0cnwt9.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "GeistMono";
+  src: url("./assets/font/GeistMono_Variable-s.p.1bcgm0qa26ixg.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "GeistPixelCircle";
+  src: url("./assets/font/GeistPixel_Circle.p.3zurfnrwei_77.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "GeistPixelSquare";
+  src: url("./assets/font/GeistPixel_Square.p.38oedokznorgu.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================
+   🛠️ Tailwind 工具类（全局可用）
+========================== */
+@utility font-geist-sans {
+  font-family: "GeistSans", system-ui, sans-serif;
+}
+@utility font-geist-mono {
+  font-family: "GeistMono", ui-monospace, monospace;
+}
+@utility font-pixel-circle {
+  font-family: "GeistPixelCircle", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+@utility font-pixel-square {
+  font-family: "GeistPixelSquare", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+@utility h-dvh {
+  height: 100dvh;
+}
+
+/* ==========================
+   🎨 全局样式重置 & 基础配置
+========================== */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --background-200: #f9fafb;
+    --gray-1000: #111827;
+    --gray-200: #e5e7eb;
+    --gray-500: #6b7280;
+    --header-height: 3.5rem;
+    font-family: "GeistSans", system-ui, sans-serif;
+  }
+
+  .dark {
+    --background-200: #111827;
+    --gray-1000: #f9fafb;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100dvh;
+    background: #000;
+    color: #ededed;
+    overflow: hidden;
+
+    /* 隐藏滚动条兼容 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* 隐藏滚动条 */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  nav::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ==========================
+   🌆 城市列表专用样式
+========================== */
+.city-item {
+  @apply border-b border-[#1f1f1f] font-pixel-circle flex items-center transition-all duration-300;
+  padding-inline: 4rem;
+  width: 100%;
+}
+
+.city-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.257); /* 边框变亮 */
+}
+
+@utility city-text {
+  @apply text-[clamp(2.7rem,7.5vw,8rem)] leading-none text-[#EDEDED] tracking-tighter py-6 transition-colors duration-300
+         group-hover/list:group-hover/item:text-[#EDEDED] group-hover/list:text-[#EDEDED]/20;
+  -webkit-text-stroke: 0.002rem currentColor;
+}
+@utility ship-icon {
+  @apply opacity-0 group-hover/item:opacity-100 transition-opacity duration-300;
+}
