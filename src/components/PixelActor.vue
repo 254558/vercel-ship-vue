@@ -1,31 +1,31 @@
 <template>
-  <!-- 身体 -->
-  <img
-    ref="actorRef"
-    :src="bodyImgSrc"
-    class="absolute h-[250px] w-auto transition-all duration-[2000ms] ease-out select-none"
-    :style="{
-      left: `${x}px`,
-      top: `${y}px`,
-      imageRendering: 'pixelated',
-      zIndex: Math.floor(y) // 动态层级：y轴越低（靠前）的显示在越上层
-    }"
-    draggable="false"
-  />
+  <template v-if="visible">
+    <!-- 身体 -->
+    <img
+      ref="actorRef"
+      :src="bodyImgSrc"
+      class="absolute top-0 left-0 h-[250px] w-auto select-none"
+      :style="{
+        transform: `translate(${x}px, ${y}px)`,
+        imageRendering: 'pixelated',
+        zIndex: Math.floor(y)
+      }"
+      draggable="false"
+    />
 
-  <!-- 表情：严格覆盖 -->
-  <img
-    v-if="showFace"
-    :src="faceImgSrc"
-    class="absolute h-[250px] w-auto pointer-events-none select-none"
-    :style="{
-      left: `${x}px`,
-      top: `${y}px`,
-      imageRendering: 'pixelated',
-      zIndex: Math.floor(y) + 1
-    }"
-    draggable="false"
-  />
+    <!-- 表情 -->
+    <img
+      v-if="showFace"
+      :src="faceImgSrc"
+      class="absolute top-0 left-0 h-[250px] w-auto pointer-events-none select-none"
+      :style="{
+        transform: `translate(${x}px, ${y}px)`,
+        imageRendering: 'pixelated',
+        zIndex: Math.floor(y) + 1
+      }"
+      draggable="false"
+    />
+  </template>
 </template>
 
 <script setup>
@@ -33,14 +33,12 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   initX: Number,
-  initY: Number
+  initY: Number,
+  spawnDelay: Number, // 接收按行出场延迟
 })
 
 const ASSETS = '/src/assets/second/'
 
-// ==========================================
-// 动画资源配置
-// ==========================================
 const animations = {
   walk: {
     front: 'front.webp', frontLeft: 'frontLeft.webp', frontRight: 'frontRight.webp',
@@ -53,33 +51,33 @@ const animations = {
     frontRight: ['Expresions_FrontRight.webp', 'Expresions_FrontRight_Normal.webp']
   },
   actionsByDir: {
-    front: ['Isometric_Front_Celebrate.webp', 'Isometric_Front_Thinking.webp', 'Isometric_Front_EyesTriangle.webp'],
-    frontLeft: ['Isometric_FrontLeft_Celebrate.webp', 'Isometric_FrontLeft_EyesTriangle.webp'],
-    frontRight: ['Isometric_FrontRight_EyesTriangle.webp', 'Isometric_FrontRight_Thinking.webp'],
+    front: ['Isometric_Front_Celebrate.webp', 'Isometric_Front_Thinking.webp'],
+    frontLeft: ['Isometric_FrontLeft_Celebrate.webp'],
+    frontRight: ['Isometric_FrontRight_Thinking.webp'],
     back: ['Isometric_Back_HighFive.webp'], backLeft: ['Isometric_BackLeft_HighFive.webp'], backRight: ['Isometric_BackRight_HighFive.webp'],
     left: ['Isometric_FrontLeft_Celebrate.webp'], right: ['Isometric_FrontRight_Thinking.webp']
   },
   spawn: 'Isometric_Front_AgentSpawn.webp'
 }
 
-// 状态控制
-const actorState = ref('spawn') // 'spawn' | 'walking' | 'action'
+// 状态
+const visible = ref(false)
+const actorState = ref('spawn')
 const actorRef = ref(null)
-const currentBodySrc = ref(animations.spawn)
+const currentBodySrc = ref('')
 const faceSrc = ref('')
 const showFace = ref(false)
-const timestamp = ref(Date.now())
+const timestamp = ref(0)
 
-// 初始在屏幕外或金字塔预设点，这里直接使用传入的金字塔坐标
 const x = ref(props.initX)
 const y = ref(props.initY)
-const speed = 1.5 + Math.random() * 1.5 // 随机速度，让走动更自然
+const speed = 1.5 + Math.random() * 1.5
 
 const dirX = ref(0)
 const dirY = ref(0)
 const lastMoveDir = ref('front')
 
-const bodyImgSrc = computed(() => `${ASSETS}${currentBodySrc.value}?v=${timestamp.value}`)
+const bodyImgSrc = computed(() => currentBodySrc.value ? `${ASSETS}${currentBodySrc.value}?v=${timestamp.value}` : '')
 const faceImgSrc = computed(() => faceSrc.value ? `${ASSETS}${faceSrc.value}` : '')
 
 const nowDirType = computed(() => {
@@ -100,6 +98,7 @@ let lastIdleTime = Date.now()
 let moveTimer = null
 let behaviorTimer = null
 
+// 随机走路方向
 function randomDir() {
   const dirs = [[0, 1], [0, -1], [-1, 0], [1, 0], [-1, 1], [1, 1], [-1, -1], [1, -1]]
   const [dx, dy] = dirs[Math.floor(Math.random() * dirs.length)]
@@ -108,6 +107,24 @@ function randomDir() {
   lastMoveDir.value = nowDirType.value
 }
 
+// 随机看向周围（互看效果）
+function randomLookDir() {
+  const lookDirs = ['front', 'frontLeft', 'frontRight']
+  const targetDir = lookDirs[Math.floor(Math.random() * lookDirs.length)]
+  lastMoveDir.value = targetDir
+  currentBodySrc.value = animations.walk[targetDir]
+  timestamp.value = Date.now()
+  return targetDir
+}
+
+// 随机表情
+function randomFace(dir) {
+  const faceList = animations.face[dir] || animations.face.front
+  faceSrc.value = faceList[Math.floor(Math.random() * faceList.length)]
+  showFace.value = true
+}
+
+// 刷新角色
 function refreshActor() {
   const dir = nowDirType.value
   showFace.value = actorState.value === 'walking' && ['front', 'frontLeft', 'frontRight'].includes(dir)
@@ -117,9 +134,11 @@ function refreshActor() {
   }
 }
 
+// 开始走路
 function startWalking() {
   clearInterval(moveTimer)
   actorState.value = 'walking'
+  showFace.value = false
   refreshActor()
 
   moveTimer = setInterval(() => {
@@ -146,6 +165,30 @@ function startWalking() {
   }, 40)
 }
 
+// 出场后：原地互看 + 随机表情
+function startLookAround() {
+  if (isStateLocked) return
+  isStateLocked = true
+
+  dirX.value = 0
+  dirY.value = 0
+  actorState.value = 'idleLook'
+
+  const lookDir = randomLookDir()
+  randomFace(lookDir)
+
+  // 1.5~3.5秒后散开
+  setTimeout(() => {
+    isStateLocked = false
+    faceSrc.value = ''
+    showFace.value = false
+    randomDir()
+    startWalking()
+    startBehaviorLoop()
+  }, 1500 + Math.random() * 2000)
+}
+
+// 走路中发呆
 function startIdle() {
   if (isStateLocked) return
   isStateLocked = true
@@ -167,14 +210,14 @@ function startIdle() {
     randomDir()
     isStateLocked = false
     startWalking()
-  }, 2000 + Math.random() * 2000) // 随机发呆1-4秒
+  }, 2000 + Math.random() * 2000)
 }
 
+// 行为循环
 function startBehaviorLoop() {
   clearInterval(behaviorTimer)
   behaviorTimer = setInterval(() => {
     const now = Date.now()
-    // 增加随机混合间隔，防止14个人同时停下
     if (actorState.value === 'walking' && !isStateLocked && now - lastIdleTime > (5000 + Math.random() * 5000) && Math.random() > 0.5) {
       lastIdleTime = now
       startIdle()
@@ -183,16 +226,18 @@ function startBehaviorLoop() {
 }
 
 onMounted(() => {
-  // 1. 出场动画保持在原地
-  currentBodySrc.value = animations.spawn
-  actorState.value = 'spawn'
-  
-  // 2. 延迟出场后（比如3秒后），各自散开随机走动
+  // 延迟出场：先等 spawnDelay 再显示角色
   setTimeout(() => {
-    randomDir()
-    startWalking()
-    startBehaviorLoop()
-  }, 3000 + Math.random() * 1500) // 错开散开的时间点，看起来更生动
+    visible.value = true
+    timestamp.value = Date.now()
+    currentBodySrc.value = animations.spawn
+    actorState.value = 'spawn'
+
+    // spawn动画1秒后 → 互看 → 散开
+    setTimeout(() => {
+      startLookAround()
+    }, 1000)
+  }, props.spawnDelay)
 })
 
 onUnmounted(() => {

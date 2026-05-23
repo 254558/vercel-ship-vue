@@ -2,7 +2,7 @@
 <template>
   <section class="relative z-10 flex-1 flex flex-col px-3 pb-15">
     <!-- 动画区域（fixed全屏，此处仅保留占位高度） -->
-    <div class="flex-1 min-h-[500px]" />
+    <div class="flex-1" />
 
     <!-- 底部内容 -->
     <div class="flex justify-between items-end w-full px-14 mt-auto">

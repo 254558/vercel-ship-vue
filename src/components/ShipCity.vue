@@ -1,7 +1,12 @@
 <template>
+  <!-- 像素人全屏动画层（Teleport到body，不受main的overflow影响） -->
+  <Teleport to="body">
+    <ActorAnimation />
+  </Teleport>
+
   <main class="relative flex flex-col h-screen bg-black text-[#EDEDED] overflow-hidden">
     <!-- 头部导航 -->
-    <header class="relative z-10 bg-black h-24 flex items-center">
+    <header class="relative z-20 bg-black h-24 flex items-center">
       <div class="w-full flex items-center justify-between px-12">
         <nav class="flex items-center gap-8 font-mono uppercase">
           <ShuffleText text="SPEAKERS" />
@@ -28,9 +33,6 @@
         </nav>
       </div>
     </header>
-
-    <!-- 像素人全屏动画层 -->
-    <ActorAnimation />
 
     <!-- 👇 底部核心内容区（已抽成组件） -->
     <HeroContent />
