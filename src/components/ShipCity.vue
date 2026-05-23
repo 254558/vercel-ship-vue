@@ -14,7 +14,7 @@
           <ShuffleText text="FAQ" />
         </nav>
 
-        <div class="flex items-center gap-1">
+        <div class="flex items-center mr-17 gap-1">
           <span class="text-[28px] font-semibold tracking-[-2px] font-geist-sans text-white">
             Ship
           </span>

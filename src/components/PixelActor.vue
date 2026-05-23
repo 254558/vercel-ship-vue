@@ -46,16 +46,17 @@ const animations = {
     left: 'left.webp', right: 'right.webp',
   },
   face: {
-    front: ['Expresions_Front.webp', 'Expresions_Front_Normal.webp', 'Expresions_Front_Excited.webp'],
-    frontLeft: ['Expresions_FrontLeft.webp', 'Expresions_FrontLeft_Normal.webp'],
-    frontRight: ['Expresions_FrontRight.webp', 'Expresions_FrontRight_Normal.webp']
+    front: ['Expresions_Front.webp', 'Expresions_Front_Normal.webp', 'Expresions_Front_Excited.webp', 'Expresions_Front_Confused.webp'],
+    frontLeft: ['Expresions_FrontLeft.webp', 'Expresions_FrontLeft_Normal.webp', 'Expresions_FrontLeft_Excited.webp', 'Expresions_FrontLeft_Confused.webp'],
+    frontRight: ['Expresions_FrontRight.webp', 'Expresions_FrontRight_Normal.webp', 'Expresions_FrontRight_Excited.webp', 'Expresions_FrontRight_Confused.webp']
   },
   actionsByDir: {
-    front: ['Isometric_Front_Celebrate.webp', 'Isometric_Front_Thinking.webp'],
-    frontLeft: ['Isometric_FrontLeft_Celebrate.webp'],
-    frontRight: ['Isometric_FrontRight_Thinking.webp'],
+    front: ['Isometric_Front_Celebrate.webp', 'Isometric_Front_Thinking.webp', 'Isometric_Front_HighFive.webp', 'Isometric_Front_TypeDance2.webp', 'Isometric_Front_TypeDance3.webp'],
+    frontLeft: ['Isometric_FrontLeft_Celebrate.webp', 'Isometric_FrontLeft_HighFive.webp', 'Isometric_FrontLeft_TypeDance.webp', 'Isometric_FrontLeft_TypeDance4.webp'],
+    frontRight: ['Isometric_FrontRight_Thinking.webp', 'Isometric_FrontRight_HighFive.webp', 'Isometric_FrontRight_TypeDance.webp', 'Isometric_FrontRight_TypeDance2.webp', 'Isometric_FrontRight_TypeDance3.webp', 'Isometric_FrontRight_TypeDance4.webp'],
     back: ['Isometric_Back_HighFive.webp'], backLeft: ['Isometric_BackLeft_HighFive.webp'], backRight: ['Isometric_BackRight_HighFive.webp'],
-    left: ['Isometric_FrontLeft_Celebrate.webp'], right: ['Isometric_FrontRight_Thinking.webp']
+    left: ['Isometric_FrontLeft_Celebrate.webp', 'Isometric_FrontLeft_TypeDance4.webp'],
+    right: ['Isometric_FrontRight_Thinking.webp', 'Isometric_FrontRight_TypeDance4.webp']
   },
   spawn: 'Isometric_Front_AgentSpawn.webp'
 }
@@ -97,6 +98,7 @@ let isStateLocked = false
 let lastIdleTime = Date.now()
 let moveTimer = null
 let behaviorTimer = null
+let faceTimer = null
 
 // 随机走路方向
 function randomDir() {
@@ -122,15 +124,26 @@ function randomFace(dir) {
   const faceList = animations.face[dir] || animations.face.front
   faceSrc.value = faceList[Math.floor(Math.random() * faceList.length)]
   showFace.value = true
+  clearTimeout(faceTimer)
+  faceTimer = setTimeout(() => {
+    showFace.value = false
+  }, 800 + Math.random() * 1200)
 }
 
 // 刷新角色
 function refreshActor() {
   const dir = nowDirType.value
-  showFace.value = actorState.value === 'walking' && ['front', 'frontLeft', 'frontRight'].includes(dir)
   if (actorState.value === 'walking') {
     currentBodySrc.value = animations.walk[dir]
     timestamp.value = Date.now()
+    // 朝前方向随机显示表情
+    if (['front', 'frontLeft', 'frontRight'].includes(dir)) {
+      if (Math.random() < 0.08) {
+        randomFace(dir)
+      }
+    } else {
+      showFace.value = false
+    }
   }
 }
 
@@ -193,20 +206,29 @@ function startIdle() {
   if (isStateLocked) return
   isStateLocked = true
   clearInterval(moveTimer)
-  
+
   lastMoveDir.value = nowDirType.value
   dirX.value = 0
   dirY.value = 0
   actorState.value = 'action'
-  showFace.value = false
 
-  const acts = animations.actionsByDir[nowDirType.value] || []
+  const dir = nowDirType.value
+  const acts = animations.actionsByDir[dir] || []
   if (acts.length > 0) {
     currentBodySrc.value = acts[Math.floor(Math.random() * acts.length)]
     timestamp.value = Date.now()
   }
 
+  // Dance动作不加表情，其余朝前方向叠表情
+  const isDancing = currentBodySrc.value.includes('TypeDance')
+  if (!isDancing && ['front', 'frontLeft', 'frontRight'].includes(dir)) {
+    randomFace(dir)
+  } else {
+    showFace.value = false
+  }
+
   setTimeout(() => {
+    showFace.value = false
     randomDir()
     isStateLocked = false
     startWalking()
@@ -243,5 +265,6 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(moveTimer)
   clearInterval(behaviorTimer)
+  clearTimeout(faceTimer)
 })
 </script>

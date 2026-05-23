@@ -18,8 +18,8 @@ const pyramidPositions = computed(() => {
   const screenW = window.innerWidth
   const screenH = window.innerHeight
 
-  const centerX = screenW / 2
-  const centerY = screenH * 0.25
+  const centerX = screenW / 2 -170
+  const centerY = screenH * 0.004
 
   const hGap = 70
   const vGap = 65
