@@ -64,8 +64,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import ShuffleCode from './ShuffleCode.vue'
-import WaveAnimation from './WaveAnimation.vue'
+import ShuffleCode from './HelloWorld_ShuffleCode.vue'
+import WaveAnimation from './HelloWorld_WaveAnimation.vue'
 
 const router = useRouter()
 
