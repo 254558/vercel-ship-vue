@@ -1,10 +1,8 @@
 <!-- HeroContent.vue -->
 <template>
   <section class="relative z-10 flex-1 flex flex-col px-3 pb-15">
-    <!-- 动画区域 -->
-    <div class="relative flex-1 min-h-[500px]">
-      <ActorAnimation />
-    </div>
+    <!-- 动画区域（fixed全屏，此处仅保留占位高度） -->
+    <div class="flex-1 min-h-[500px]" />
 
     <!-- 底部内容 -->
     <div class="flex justify-between items-end w-full px-14 mt-auto">
@@ -66,7 +64,6 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import ActorAnimation from './ShipCity_HeroContent_ActorAnimation.vue'
 
 const countDown = ref('00D.00H.00M.00S')
 

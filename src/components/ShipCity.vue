@@ -29,6 +29,9 @@
       </div>
     </header>
 
+    <!-- 像素人全屏动画层 -->
+    <ActorAnimation />
+
     <!-- 👇 底部核心内容区（已抽成组件） -->
     <HeroContent />
   </main>
@@ -36,5 +39,6 @@
 
 <script setup>
 import ShuffleText from './ShipCity_ShuffleText.vue'
-import HeroContent from './ShipCity_HeroContent.vue'  // 引入
+import HeroContent from './ShipCity_HeroContent.vue'
+import ActorAnimation from './ShipCity_HeroContent_ActorAnimation.vue'
 </script>
