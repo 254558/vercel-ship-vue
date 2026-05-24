@@ -16,8 +16,8 @@ import { ref, onMounted } from 'vue'
 import PixelActor from './ShipCity_HeroContent_ActorAnimation_PixelActor.vue'
 
 const LAYOUT = [1, 3, 4, 6]
-const H_GAP = 70
-const V_GAP = 65
+const H_GAP = 90
+const V_GAP = 95
 const ROW_DELAY_STEP = 160
 
 const positions = ref([])

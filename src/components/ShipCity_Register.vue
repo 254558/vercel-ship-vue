@@ -179,28 +179,71 @@
 
       <!-- Checkboxes + Complete purchase -->
       <div class="flex flex-col gap-5">
+        <!-- 自定义 SVG 对勾复选框 1 -->
         <label class="text-[13px] inline-flex items-start cursor-pointer">
-          <input type="checkbox" v-model="form.termsAccepted" class="mt-1 mr-2">
+          <div class="relative w-4 h-4 mt-1 mr-2">
+            <input 
+              type="checkbox" 
+              v-model="form.termsAccepted"
+              class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+            />
+            <div 
+              class="w-4 h-4 rounded border border-[#555] bg-[#333] flex items-center justify-center transition-colors"
+              :class="form.termsAccepted ? 'bg-white border-white' : ''"
+            >
+              <svg fill="none" height="16" viewBox="0 0 20 20" width="16" class="scale-75">
+                <path 
+                  d="M14 7L8.5 12.5L6 10" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width="2"
+                  :class="form.termsAccepted ? 'stroke-black' : 'stroke-transparent'"
+                />
+              </svg>
+            </div>
+          </div>
           <span class="text-sm text-gray-400 pt-[3px] text-pretty leading-normal">I have read and agree to the <a href="https://vercel.com/legal/event-terms-conditions" target="_blank" class="underline underline-offset-2 decoration-gray-600">Event Terms and Conditions</a>.</span>
         </label>
+
+        <!-- 自定义 SVG 对勾复选框 2 -->
         <label class="text-[13px] inline-flex items-start cursor-pointer">
-          <input type="checkbox" v-model="form.marketingComms" class="mt-1 mr-2">
+          <div class="relative w-4 h-4 mt-1 mr-2">
+            <input 
+              type="checkbox" 
+              v-model="form.marketingComms"
+              class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+            />
+            <div 
+              class="w-4 h-4 rounded border border-[#555] bg-[#333] flex items-center justify-center transition-colors"
+              :class="form.marketingComms ? 'bg-white border-white' : ''"
+            >
+              <svg fill="none" height="16" viewBox="0 0 20 20" width="16" class="scale-75">
+                <path 
+                  d="M14 7L8.5 12.5L6 10" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width="2"
+                  :class="form.marketingComms ? 'stroke-black' : 'stroke-transparent'"
+                />
+              </svg>
+            </div>
+          </div>
           <span class="text-sm text-gray-400 pt-[3px] text-pretty leading-normal">Yes, I agree to receive marketing communications from Vercel as described in your <a href="https://vercel.com/legal/privacy-policy" target="_blank" class="underline underline-offset-2 decoration-gray-600">Privacy Policy</a>. I can withdraw my consent at any time by clicking the unsubscribe link in the emails.</span>
         </label>
 
         <!-- Complete purchase -->
         <div
           class="border transition-colors p-5 relative min-h-20 cursor-pointer"
-          :class="form.termsAccepted ? 'bg-white border-white' : 'bg-transparent border-[#343232c0]'"
+          :class="form.termsAccepted && form.marketingComms ? 'bg-white border-white' : 'bg-transparent border-[#343232c0]'"
         >
           <div class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div class="flex flex-col gap-1">
-              <h3 class="text-base font-semibold" :class="form.termsAccepted ? 'text-black' : 'text-gray-1000'">Complete purchase</h3>
+              <h3 class="text-base font-semibold" :class="form.termsAccepted && form.marketingComms ? 'text-black' : 'text-gray-1000'">Complete purchase</h3>
             </div>
             <div class="flex max-md:flex-col md:items-center gap-4">
               <p class="max-w-[560px] font-mono text-sm line-through text-gray-500">$250.00</p>
               <div class="min-w-[82px] px-3 py-2.5 font-mono text-center text-sm uppercase font-semibold"
-                :class="form.termsAccepted ? 'bg-black text-white' : 'bg-white text-black'"
+                :class="form.termsAccepted && form.marketingComms ? 'bg-black text-white' : 'bg-white text-black'"
               >$125.00</div>
             </div>
           </div>
@@ -231,8 +274,8 @@
           <button
             type="submit"
             class="inline-flex items-center justify-center gap-3 h-12 px-5 font-mono uppercase font-semibold text-sm bg-white text-black hover:bg-white/80 cursor-pointer select-none whitespace-nowrap transition-colors w-full max-md:w-full"
-            :disabled="!form.termsAccepted"
-            :class="form.termsAccepted ? '' : 'opacity-50 grayscale cursor-not-allowed'"
+            :disabled="!form.termsAccepted || !form.marketingComms"
+            :class="(form.termsAccepted && form.marketingComms) ? '' : 'opacity-50 grayscale cursor-not-allowed'"
           >
             Checkout
             <svg class="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="currentColor">
