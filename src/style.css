@@ -1,9 +1,6 @@
-/* 🔥 Vite + Tailwind v4 官方唯一推荐写法 */
 @import "tailwindcss";
 
-/* ==========================
-   🎨 Geist 字体全套配置
-========================== */
+/* ── 字体 ── */
 @font-face {
   font-family: "GeistSans";
   src: url("./assets/font/caa3a2e1cccd8315.p.0wgildi0cnwt9.woff2") format("woff2");
@@ -33,9 +30,7 @@
   font-display: swap;
 }
 
-/* ==========================
-   🛠️ Tailwind 工具类（全局可用）
-========================== */
+/* ── Tailwind 工具类 ── */
 @utility font-geist-sans {
   font-family: "GeistSans", system-ui, sans-serif;
 }
@@ -52,14 +47,11 @@
   letter-spacing: -0.02em;
   line-height: 1;
 }
-
 @utility h-dvh {
   height: 100dvh;
 }
 
-/* ==========================
-   🎨 全局样式重置 & 基础配置
-========================== */
+/* ── 全局重置 ── */
 @layer base {
   *,
   *::before,
@@ -90,13 +82,10 @@
     background: #000;
     color: #ededed;
     overflow: hidden;
-
-    /* 隐藏滚动条兼容 */
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  /* 隐藏滚动条 */
   html::-webkit-scrollbar,
   body::-webkit-scrollbar,
   nav::-webkit-scrollbar {
@@ -104,9 +93,7 @@
   }
 }
 
-/* ==========================
-   🌆 城市列表专用样式
-========================== */
+/* ── 城市列表 ── */
 .city-item {
   @apply border-b border-[#1f1f1f] font-pixel-circle flex items-center transition-all duration-300;
   padding-inline: 4rem;
@@ -115,7 +102,7 @@
 
 .city-item:hover {
   background-color: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.257); /* 边框变亮 */
+  border-color: rgba(255, 255, 255, 0.257);
 }
 
 @utility city-text {

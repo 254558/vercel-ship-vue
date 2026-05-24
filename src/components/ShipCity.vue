@@ -1,11 +1,9 @@
 <template>
-  <!-- 像素人全屏动画层（Teleport到body，不受main的overflow影响） -->
   <Teleport to="body">
     <ActorAnimation />
   </Teleport>
 
   <main class="relative flex flex-col h-screen bg-black text-[#EDEDED] overflow-hidden">
-    <!-- 头部导航 -->
     <header class="relative z-20 bg-black h-24 flex items-center">
       <div class="w-full flex items-center justify-between px-12">
         <nav class="flex items-center gap-8 font-mono uppercase">
@@ -21,7 +19,7 @@
           <span
             class="px-0.5 text-xs border-[1.5px] border-white rounded font-mono cursor-pointer tracking-tight font-semibold"
           >
-            LDN
+            {{ cityCode }}
           </span>
         </div>
 
@@ -34,13 +32,17 @@
       </div>
     </header>
 
-    <!-- 👇 底部核心内容区（已抽成组件） -->
     <HeroContent />
   </main>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import ShuffleText from './ShipCity_ShuffleText.vue'
 import HeroContent from './ShipCity_HeroContent.vue'
 import ActorAnimation from './ShipCity_HeroContent_ActorAnimation.vue'
+
+const route = useRoute()
+const cityCode = computed(() => route.meta.code || 'LDN')
 </script>

@@ -1,10 +1,7 @@
-<!-- HeroContent.vue -->
 <template>
   <section class="relative z-10 flex-1 flex flex-col px-3 pb-15">
-    <!-- 动画区域（fixed全屏，此处仅保留占位高度） -->
     <div class="flex-1" />
 
-    <!-- 底部内容 -->
     <div class="flex justify-between items-end w-full px-14 mt-auto">
       <div class="flex flex-col justify-end">
         <h1 class="font-pixel-circle text-8xl mb-12 tracking-[-5px]">
@@ -12,9 +9,7 @@
         </h1>
 
         <div class="max-w-4xl">
-          <div
-            class="flex flex-wrap items-center gap-8 font-mono text-base uppercase text-gray-1000"
-          >
+          <div class="flex flex-wrap items-center gap-8 font-mono text-base uppercase text-gray-1000">
             <div class="flex flex-col gap-[0.5px]">
               <span>MAGAZINE</span>
               <span>LONDON</span>
@@ -46,16 +41,9 @@
           </span>
         </a>
 
-        <p
-          class="font-mono font-normal tracking-normal text-gray-1000 text-copy-16 leading-normal text-left xl:text-center uppercase"
-        >
+        <p class="font-mono font-normal tracking-normal text-gray-1000 text-copy-16 leading-normal text-left xl:text-center uppercase">
           Already registered?
-
-          <a
-            class="hover:opacity-70 transition-opacity underline underline-offset-2 text-gray-500"
-          >
-            Log in
-          </a>
+          <a class="hover:opacity-70 transition-opacity underline underline-offset-2 text-gray-500">Log in</a>
         </p>
       </div>
     </div>
@@ -66,42 +54,27 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const countDown = ref('00D.00H.00M.00S')
-
 let timer = null
 
-// 倒计时
-function updateTime() {
-  const diff = new Date('2026-06-17') - new Date()
+const TARGET_DATE = new Date('2026-06-17')
 
-  if (diff <= 0) {
-    countDown.value = '00D.00H.00M.00S'
-    return
-  }
-
+function formatCountDown(diff) {
+  if (diff <= 0) return '00D.00H.00M.00S'
   const d = Math.floor(diff / 86400000)
+  const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0')
+  const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0')
+  const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0')
+  return `${d}D.${h}H.${m}M.${s}S`
+}
 
-  const h = String(
-    Math.floor((diff % 86400000) / 3600000)
-  ).padStart(2, '0')
-
-  const m = String(
-    Math.floor((diff % 3600000) / 60000)
-  ).padStart(2, '0')
-
-  const s = String(
-    Math.floor((diff % 60000) / 1000)
-  ).padStart(2, '0')
-
-  countDown.value = `${d}D.${h}H.${m}M.${s}S`
+function updateTime() {
+  countDown.value = formatCountDown(TARGET_DATE - new Date())
 }
 
 onMounted(() => {
   updateTime()
-
   timer = setInterval(updateTime, 1000)
 })
 
-onUnmounted(() => {
-  clearInterval(timer)
-})
+onUnmounted(() => clearInterval(timer))
 </script>

@@ -12,54 +12,44 @@
 <script setup>
 import { ref, onUnmounted } from 'vue'
 
-// 默认显示 26
-const targetText = ref('26')
-const displayText = ref('26')
+const DEFAULT_TEXT = '26'
+const CHAR_POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const MAX_STEPS = 12
+const STEP_INTERVAL = 35
+
+const targetText = ref(DEFAULT_TEXT)
+const displayText = ref(DEFAULT_TEXT)
 let shuffleTimer = null
 
-// 随机大写字母
-const getRandomChar = () => {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  return letters[Math.floor(Math.random() * letters.length)]
+function randomChars(len) {
+  return Array.from({ length: len }, () =>
+    CHAR_POOL[Math.floor(Math.random() * CHAR_POOL.length)]
+  ).join('')
 }
 
-// 生成对应长度的随机字符串
-const getRandomByLength = (len) => {
-  return Array(len).fill(0).map(() => getRandomChar()).join('')
-}
-
-// 开始洗牌
-const startShuffle = (finalText) => {
+function startShuffle(finalText) {
   clearInterval(shuffleTimer)
   targetText.value = finalText
-  const len = finalText.length
   let step = 0
-  const maxStep = 12
 
   shuffleTimer = setInterval(() => {
-    if (step < maxStep) {
-      displayText.value = getRandomByLength(len)
+    if (step < MAX_STEPS) {
+      displayText.value = randomChars(finalText.length)
       step++
     } else {
       displayText.value = finalText
       clearInterval(shuffleTimer)
     }
-  }, 35)
+  }, STEP_INTERVAL)
 }
 
-// 重置回 26
-const resetShuffle = () => {
+function resetShuffle() {
   clearInterval(shuffleTimer)
-  targetText.value = '26'
-  displayText.value = '26'
+  targetText.value = DEFAULT_TEXT
+  displayText.value = DEFAULT_TEXT
 }
 
-// 暴露方法给父组件调用
-defineExpose({
-  startShuffle,
-  resetShuffle
-})
+defineExpose({ startShuffle, resetShuffle })
 
-// 清理定时器
 onUnmounted(() => clearInterval(shuffleTimer))
 </script>

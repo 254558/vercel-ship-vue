@@ -1,11 +1,6 @@
 <template>
   <div class="wave-animation-container">
-    <canvas
-      ref="canvasRef"
-      class="wave-canvas"
-      width="260"
-      height="190"
-    ></canvas>
+    <canvas ref="canvasRef" class="wave-canvas" width="260" height="190" />
   </div>
 </template>
 
@@ -19,12 +14,11 @@ let animTimer = null
 let currentFrame = 0
 let isPlaying = false
 
-const frameCount = 16
-const frameW = 260
-const frameH = 190
-const speed = 100
-
-const frameSequence = Array.from({ length: 16 }, (_, i) => i)
+const FRAME_COUNT = 16
+const FRAME_W = 260
+const FRAME_H = 190
+const FRAME_SPEED = 100
+const REST_FRAME = 8
 
 function getImgSrc(idx) {
   return new URL(`../assets/first/${idx + 1}.png`, import.meta.url).href
@@ -32,7 +26,7 @@ function getImgSrc(idx) {
 
 async function loadImages() {
   const list = []
-  for (let i = 0; i < frameCount; i++) {
+  for (let i = 0; i < FRAME_COUNT; i++) {
     const img = new Image()
     img.src = getImgSrc(i)
     await new Promise(resolve => { img.onload = resolve })
@@ -43,35 +37,35 @@ async function loadImages() {
 
 function drawFrame(idx) {
   if (!ctx || !imgList[idx]) return
-  ctx.clearRect(0, 0, frameW, frameH)
+  ctx.clearRect(0, 0, FRAME_W, FRAME_H)
   ctx.imageSmoothingEnabled = false
-  ctx.drawImage(imgList[idx], 0, 0, frameW, frameH)
+  ctx.drawImage(imgList[idx], 0, 0, FRAME_W, FRAME_H)
 }
 
 function animate() {
   if (!isPlaying) return
   drawFrame(currentFrame)
   currentFrame++
-  if (currentFrame >= frameCount) {
+  if (currentFrame >= FRAME_COUNT) {
     currentFrame = 0
     stopPlay()
     return
   }
-  animTimer = setTimeout(animate, speed)
+  animTimer = setTimeout(animate, FRAME_SPEED)
 }
 
-const startPlay = () => {
+function startPlay() {
   if (isPlaying) return
   isPlaying = true
   currentFrame = 0
   animate()
 }
 
-const stopPlay = () => {
+function stopPlay() {
   isPlaying = false
   clearTimeout(animTimer)
   animTimer = null
-  currentFrame = 8
+  currentFrame = REST_FRAME
   drawFrame(currentFrame)
 }
 
@@ -80,12 +74,10 @@ onMounted(async () => {
   if (!canvas) return
   ctx = canvas.getContext('2d')
   await loadImages()
-  drawFrame(8)
+  drawFrame(REST_FRAME)
 })
 
-onUnmounted(() => {
-  stopPlay()
-})
+onUnmounted(() => stopPlay())
 
 defineExpose({ startPlay, stopPlay })
 </script>
