@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute top-0 left-0 right-0 pointer-events-none">
+  <div class="absolute -top-30 left-0 right-0 pointer-events-none">
     <PixelActor
       v-for="pos in positions"
       :key="pos.id"

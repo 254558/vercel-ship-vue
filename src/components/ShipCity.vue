@@ -33,6 +33,9 @@
       <HeroContent />
     </div>
     <FeaturedSpeakers />
+    <FeaturedSessions />
+    <CTA />
+    <FAQ />
   </main>
 </template>
 
@@ -43,6 +46,9 @@ import ShuffleText from './ShipCity_ShuffleText.vue'
 import HeroContent from './ShipCity_HeroContent.vue'
 import ActorAnimation from './ShipCity_HeroContent_ActorAnimation.vue'
 import FeaturedSpeakers from './ShipCity_FeaturedSpeakers.vue'
+import FeaturedSessions from './ShipCity_FeaturedSessions.vue'
+import CTA from './ShipCity_CTA.vue'
+import FAQ from './ShipCity_FAQ.vue'
 
 const route = useRoute()
 const cityCode = computed(() => route.meta.code || 'LDN')

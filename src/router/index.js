@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HelloWorld from '../components/HelloWorld.vue'
 import ShipCity from '../components/ShipCity.vue'
+import ShipCityRegister from '../components/ShipCity_Register.vue'
 
 const CITIES = {
   london: { code: 'LDN', label: 'London', date: '2026-06-17' },
@@ -15,6 +16,11 @@ const routes = [
   ...Object.entries(CITIES).map(([slug, meta]) => ({
     path: `/ship/${slug}`,
     component: ShipCity,
+    meta,
+  })),
+  ...Object.entries(CITIES).map(([slug, meta]) => ({
+    path: `/ship/${slug}/register`,
+    component: ShipCityRegister,
     meta,
   })),
 ]
