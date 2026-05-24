@@ -34,7 +34,7 @@ const props = defineProps({
   spawnDelay: Number,
 })
 
-const ASSETS = '/src/assets/second/'
+const ASSETS = '/second/'
 const FRONT_DIRS = ['front', 'frontLeft', 'frontRight']
 
 const SPRITES = {
