@@ -1,10 +1,6 @@
 <template>
-  <Teleport to="body">
-    <ActorAnimation />
-  </Teleport>
-
-  <main class="relative flex flex-col h-screen bg-black text-[#EDEDED] overflow-hidden">
-    <header class="relative z-20 bg-black h-24 flex items-center">
+  <main class="relative flex flex-col bg-black text-[#EDEDED]">
+    <header class="relative z-20 bg-black h-24 flex items-center shrink-0">
       <div class="w-full flex items-center justify-between px-12">
         <nav class="flex items-center gap-8 font-mono uppercase">
           <ShuffleText text="SPEAKERS" />
@@ -32,7 +28,11 @@
       </div>
     </header>
 
-    <HeroContent />
+    <div class="relative h-[calc(100dvh-6rem)] flex flex-col shrink-0">
+      <ActorAnimation />
+      <HeroContent />
+    </div>
+    <FeaturedSpeakers />
   </main>
 </template>
 
@@ -42,6 +42,7 @@ import { useRoute } from 'vue-router'
 import ShuffleText from './ShipCity_ShuffleText.vue'
 import HeroContent from './ShipCity_HeroContent.vue'
 import ActorAnimation from './ShipCity_HeroContent_ActorAnimation.vue'
+import FeaturedSpeakers from './ShipCity_FeaturedSpeakers.vue'
 
 const route = useRoute()
 const cityCode = computed(() => route.meta.code || 'LDN')

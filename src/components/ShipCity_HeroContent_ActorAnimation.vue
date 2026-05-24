@@ -1,11 +1,12 @@
 <template>
-  <div class="fixed inset-0 w-screen h-screen overflow-hidden pointer-events-none">
+  <div class="absolute top-0 left-0 right-0 pointer-events-none">
     <PixelActor
       v-for="pos in positions"
       :key="pos.id"
       :init-x="pos.x"
       :init-y="pos.y"
       :spawn-delay="pos.delay"
+      :speed="0.09"
     />
   </div>
 </template>

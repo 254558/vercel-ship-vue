@@ -78,16 +78,11 @@
   html,
   body {
     width: 100%;
-    height: 100dvh;
+    min-height: 100dvh;
     background: #000;
     color: #ededed;
-    overflow: hidden;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
   }
 
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar,
   nav::-webkit-scrollbar {
     display: none;
   }
