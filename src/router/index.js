@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HelloWorld from '../components/HelloWorld.vue'
-import ShipCity from '../components/ShipCity.vue'
-import ShipCityRegister from '../components/ShipCity_Register.vue'
+
+const HelloWorld = () => import('../components/HelloWorld.vue')
+const ShipCity = () => import('../components/ShipCity.vue')
+const ShipCityRegister = () => import('../components/Register.vue')
 
 const CITIES = {
   london: { code: 'LDN', label: 'London', date: '2026-06-17' },

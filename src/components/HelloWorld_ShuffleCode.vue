@@ -1,7 +1,7 @@
 <template>
   <div class="relative h-5">
     <div
-      class="absolute left-0 top-0 h-5 border-[1.5px] border-white rounded-sm flex items-center justify-center px-[4px] transition-all duration-200"
+      class="absolute border-[1.5px] border-white rounded-sm flex items-center justify-center transition-all duration-200"
       :class="targetText.length === 1 ? 'w-[21px]' : targetText.length === 2 ? 'w-[26px]' : 'w-[32px]'"
     >
       <span class="font-mono uppercase text-xs font-semibold text-white">{{ displayText }}</span>
@@ -28,7 +28,6 @@ function randomChars(len) {
 }
 
 function startShuffle(finalText) {
-  clearInterval(shuffleTimer)
   targetText.value = finalText
   let step = 0
 
