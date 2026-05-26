@@ -315,7 +315,7 @@ function scheduleWalkFromLookAround() {
   lookAroundTimer = setTimeout(() => {
     transitionTo('walking')
     startBehaviorLoop()
-  }, 1500 + Math.random() * 2000)
+  }, Math.random() * 2000)
 }
 
 // 待机结束自动走路
