@@ -1,9 +1,9 @@
 <template>
-  <div class="lg:pt-[calc(12rem-var(--header-height))] lg:pb-48 mt-50 text-gray-1000 bg-black">
+  <div class="lg:pt-[calc(30rem-var(--header-height))]">
     <div class="mx-auto w-full px-16 grid lg:grid-cols-[repeat(18,1fr)] lg:gap-5 gap-6">
       <div class="lg:col-span-6">
         <div class="flex flex-col items-start gap-12 lg:sticky lg:top-[192px]">
-          <p class="font-pixel-circle text-gray-1000 leading-none text-5xl xl:text-7xl xl:leading-none font-medium tracking-[-0.1rem] xl:tracking-[-0.2rem] [-webkit-text-stroke:0.02rem_currentColor]">FAQ</p>
+          <p class="font-pixel-circle text-gray-1000 leading-none text-5xl xl:text-7xl  tracking-[-0.1rem] xl:tracking-[-0.2rem] [-webkit-text-stroke:0.02rem_currentColor]">FAQ</p>
         </div>
       </div>
       <div class="lg:col-start-7 lg:col-span-11 xl:col-start-8">
@@ -31,10 +31,15 @@
               </div>
             </button>
             <div
-              v-show="openIndex === i"
-              class="font-mono font-normal tracking-normal text-gray-400 text-base leading-normal pb-6"
+              class="overflow-hidden transition-all duration-300 ease-in-out"
+              :style="{ maxHeight: openIndex === i ? contentHeight[i] + 'px' : '0' }"
             >
-              {{ faq.answer }}
+              <div
+                class="font-mono font-normal tracking-normal text-gray-400 text-base leading-normal pb-6"
+                :ref="el => setHeight(el, i)"
+              >
+                {{ faq.answer }}
+              </div>
             </div>
           </div>
         </div>
@@ -44,9 +49,18 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
+import { ref, nextTick } from 'vue'
 const openIndex = ref(-1)
+const contentHeight = ref([])
+
+// 自动获取内容高度，实现动画
+function setHeight(el, i) {
+  if (el) {
+    nextTick(() => {
+      contentHeight.value[i] = el.scrollHeight
+    })
+  }
+}
 
 function toggle(i) {
   openIndex.value = openIndex.value === i ? -1 : i

@@ -1,6 +1,6 @@
 <template>
   <section class="bg-black pt-28 pb-20">
-    <div class="mx-auto px-6 md:px-16 w-full">
+    <div class="mx-auto px-6 md:px-16 ">
       <div class="flex flex-col lg:flex-row lg:justify-between gap-6 mb-10 lg:mb-20">
         <h2 class="text-white font-pixel-circle text-7xl font-medium leading-none">
           Featured speakers
@@ -36,7 +36,7 @@
             </div>
           </div>
 
-          <div class="relative w-[400px] xl:w-[500px] shrink-0 hidden md:block">
+          <div class="relative w-[400px] xl:w-[500px] shrink-0">
             <img
               v-for="(speaker, i) in speakers"
               :key="i"
