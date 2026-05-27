@@ -28,7 +28,7 @@
           >
             <div class="flex flex-col gap-6 items-start col-span-full lg:col-span-4">
               <h3 class="text-gray-1000 leading-none text-3xl lg:leading-none lg:tracking-[-0.04em] font-medium">{{ session.title }}</h3>
-              <div class="text-[18px] font-mono uppercase text-gray-500">{{ session.time }}</div>
+              <div class="text-[18px] font-mono uppercase text-gray-1000">{{ session.time }}</div>
             </div>
             <div class="col-span-full lg:col-start-6 lg:col-span-6 flex flex-col gap-6">
               <p class="font-mono font-normal tracking-normal text-gray-400 text-base leading-normal">{{ session.description }}</p>
