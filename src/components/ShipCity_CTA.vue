@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-full relative flex items-center mt-30 justify-center">
+  <div class="col-span-full relative flex items-center mt-40 justify-center">
     <div class="aspect-[40/10] w-[65vw]">
       <router-link
         :to="`/ship/${citySlug}/register`"

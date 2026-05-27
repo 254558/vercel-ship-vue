@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:pt-[calc(30rem-var(--header-height))]">
+  <div class="lg:pt-[calc(28rem-var(--header-height))]">
     <div class="mx-auto w-full px-16 grid lg:grid-cols-[repeat(18,1fr)] lg:gap-5 gap-6">
       <div class="lg:col-span-6">
         <div class="flex flex-col items-start gap-12 lg:sticky lg:top-[192px]">
