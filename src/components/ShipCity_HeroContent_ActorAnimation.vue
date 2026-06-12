@@ -1,47 +1,52 @@
 <template>
-  <div class="absolute -top-30 left-0 right-0 pointer-events-none">
-    <PixelActor
-      v-for="pos in positions"
-      :key="pos.id"
-      :init-x="pos.x"
-      :init-y="pos.y"
-      :spawn-delay="pos.delay"
-      :speed="0.09"
-    />
-  </div>
+  <canvas
+    ref="canvasRef"
+    class="absolute top-0 left-0 w-full pointer-events-none"
+    :style="{ imageRendering: 'pixelated', height: pageHeight + 'px' }"
+  />
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import PixelActor from './ShipCity_HeroContent_ActorAnimation_PixelActor.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { AgentManager } from '@/composables/useAgentCanvas'
 
-const LAYOUT = [1, 3, 4, 6]
-const H_GAP = 90
-const V_GAP = 95
-const ROW_DELAY_STEP = 160
+const canvasRef = ref(null)
+const pageHeight = ref(0)
+let manager = null
 
-const positions = ref([])
+function getPageSize() {
+  return {
+    w: window.innerWidth,
+    h: document.documentElement.scrollHeight,
+  }
+}
 
-onMounted(() => {
-  const screenW = window.innerWidth
-  const screenH = window.innerHeight
+function handleResize() {
+  const { w, h } = getPageSize()
+  pageHeight.value = h
+  if (manager) manager.resize(w, h)
+}
 
-  const centerX = screenW / 2 - 170
-  const centerY = screenH * 0.004
-  const result = []
+onMounted(async () => {
+  const canvas = canvasRef.value
+  if (!canvas) return
 
-  LAYOUT.forEach((count, row) => {
-    const offset = ((count - 1) * H_GAP) / 2
-    for (let col = 0; col < count; col++) {
-      result.push({
-        id: `${row}-${col}`,
-        x: centerX + col * H_GAP - offset,
-        y: centerY + row * V_GAP,
-        delay: row * ROW_DELAY_STEP,
-      })
-    }
-  })
+  const { w, h } = getPageSize()
+  pageHeight.value = h
+  canvas.width = w
+  canvas.height = h
 
-  positions.value = result
+  manager = new AgentManager(canvas)
+  await manager.init()
+
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+  if (manager) {
+    manager.destroy()
+    manager = null
+  }
 })
 </script>

@@ -17,7 +17,7 @@
 
         <nav class="flex items-center gap-8 font-geist-mono uppercase text-sm tracking-wider">
           <router-link :to="`/ship/${citySlug}/register`" class="hover:opacity-70 transition-opacity cursor-pointer inline-flex">GET A TICKET</router-link>
-          <a href="/ship/login" class="hover:opacity-70 transition-opacity">Login</a>
+          <router-link to="/ship/login" class="hover:opacity-70 transition-opacity">Login</router-link>
         </nav>
       </div>
     </header>
@@ -25,20 +25,20 @@
   <form class="flex relative max-xl:flex-col max-xl:items-center xl:items-stretch xl:justify-center pl-4 pr-20" @submit.prevent>
     <div class="hidden xl:block w-1/4 max-w-[460px] max-[1600px]:hidden"></div>
     <div class="flex flex-col gap-10 lg:border-x lg:border-[#343232c0] p-6 md:p-16 lg:p-20 w-full max-w-[990px] 2xl:w-1/2 min-h-[calc(100vh-3.5rem)]">
-      <!-- 标题 -->
+      <!-- Title -->
       <div>
         <div class="flex flex-col gap-4">
           <h1 class="text-gray-1000 leading-none text-2xl lg:text-3xl xl:text-5xl tracking-[-3px] xl:leading-none font-medium">
-            Join us in London on <span class="whitespace-nowrap">June 17</span>
+            Join us in {{ cityLabel }} on <span class="whitespace-nowrap">{{ cityDateDisplay }}</span>
           </h1>
           <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal">
             Already registered?
-            <a href="/ship/login" class="underline underline-offset-2 decoration-gray-600 hover:opacity-70 transition-opacity">Log in</a>
+            <router-link to="/ship/login" class="underline underline-offset-2 decoration-gray-600 hover:opacity-70 transition-opacity">Log in</router-link>
           </p>
         </div>
       </div>
 
-      <!-- 票种选择 -->
+      <!-- Ticket selection -->
       <div class="w-full flex flex-col gap-6">
         <div class="flex flex-col gap-3">
           <div
@@ -49,20 +49,19 @@
             <div class="flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div class="flex flex-col gap-1">
                 <h3 class="text-base font-semibold" :class="ticketType === 'in-person' ? 'text-white' : 'text-gray-1000'">In-person</h3>
-                <p class="max-w-[560px] font-mono text-sm" :class="ticketType === 'in-person' ? 'text-white/80' : 'text-gray-400'">Join us in London on June 17</p>
+                <p class="max-w-[560px] font-mono text-sm" :class="ticketType === 'in-person' ? 'text-white/80' : 'text-gray-400'">Join us in {{ cityLabel }} on {{ cityDateDisplay }}</p>
               </div>
               <div class="flex flex-col gap-4 lg:flex-row lg:items-center">
-                <p class="max-w-[560px] font-mono text-sm line-through" :class="ticketType === 'in-person' ? 'text-white/50' : 'text-gray-500'">$250.00</p>
-                <div class="min-w-[82px] px-3 py-2.5 font-mono text-center text-sm uppercase font-semibold"
-                  :class="ticketType === 'in-person' ? 'bg-white text-black' : 'bg-white text-black'"
-                >$125.00</div>
+                <p class="max-w-[560px] font-mono text-sm line-through" :class="ticketType === 'in-person' ? 'text-white/50' : 'text-gray-500'">{{ formatPrice(TICKET_ORIGINAL_PRICE) }}</p>
+                <div class="min-w-[82px] px-3 py-2.5 font-mono text-center text-sm uppercase font-semibold bg-white text-black"
+                >{{ formatPrice(TICKET_SALE_PRICE) }}</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- 步骤1: Attendee info -->
+      <!-- Step 1: Attendee info -->
       <div class="w-full flex flex-col gap-6">
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-4 lg:flex-row lg:items-center">
@@ -73,27 +72,27 @@
         <div class="grid gap-6 lg:grid-cols-2">
           <div class="flex flex-col gap-2">
             <label class="text-xs text-gray-400 font-mono uppercase">First name</label>
-            <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none" placeholder="Tammy" required autocomplete="given-name" maxlength="40" v-model="form.firstName">
+            <input :class="INPUT_BASE_CLASS" placeholder="Tammy" required autocomplete="given-name" maxlength="40" v-model="form.firstName">
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-xs text-gray-400 font-mono uppercase">Last name</label>
-            <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none" placeholder="Triangle" required autocomplete="family-name" maxlength="40" v-model="form.lastName">
+            <input :class="INPUT_BASE_CLASS" placeholder="Triangle" required autocomplete="family-name" maxlength="40" v-model="form.lastName">
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-xs text-gray-400 font-mono uppercase">Work Email</label>
-            <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none" placeholder="tammytriangle@acme.com" required type="email" v-model="form.email">
+            <input :class="INPUT_BASE_CLASS" placeholder="tammytriangle@acme.com" required type="email" v-model="form.email">
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-xs text-gray-400 font-mono uppercase">Company Name</label>
-            <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none" placeholder="Company" required v-model="form.companyName">
+            <input :class="INPUT_BASE_CLASS" placeholder="Company" required v-model="form.companyName">
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-xs text-gray-400 font-mono uppercase">Job Title</label>
-            <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none" placeholder="Role or function" required v-model="form.title">
+            <input :class="INPUT_BASE_CLASS" placeholder="Role or function" required v-model="form.title">
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-xs text-gray-400 font-mono uppercase">Country</label>
-            <select class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none appearance-none" required v-model="form.country">
+            <select :class="INPUT_BASE_CLASS + ' appearance-none'" required v-model="form.country">
               <option disabled value="">Select an option</option>
               <option value="US">United States</option>
               <option value="GB">United Kingdom</option>
@@ -113,7 +112,7 @@
         </div>
       </div>
 
-      <!-- 步骤2: Buy ticket -->
+      <!-- Step 2: Buy ticket -->
       <div class="w-full flex flex-col gap-6">
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-4 lg:flex-row lg:items-center">
@@ -128,16 +127,16 @@
           <div class="border border-[#343232c0] p-6 flex flex-col gap-4">
             <div class="flex flex-col gap-2">
               <label class="text-xs text-gray-400 font-mono uppercase">Card number</label>
-              <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none" placeholder="4242 4242 4242 4242" v-model="form.cardNumber">
+              <input :class="INPUT_BASE_CLASS" placeholder="4242 4242 4242 4242" v-model="form.cardNumber">
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div class="flex flex-col gap-2">
                 <label class="text-xs text-gray-400 font-mono uppercase">Expiry</label>
-                <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none" placeholder="MM / YY" v-model="form.expiry">
+                <input :class="INPUT_BASE_CLASS" placeholder="MM / YY" v-model="form.expiry">
               </div>
               <div class="flex flex-col gap-2">
                 <label class="text-xs text-gray-400 font-mono uppercase">CVC</label>
-                <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none" placeholder="123" v-model="form.cvc">
+                <input :class="INPUT_BASE_CLASS" placeholder="123" v-model="form.cvc">
               </div>
             </div>
           </div>
@@ -149,7 +148,7 @@
         <div class="flex flex-col gap-2">
           <label class="text-xs text-gray-400 font-mono uppercase">Promo Code</label>
           <div class="relative">
-            <input class="w-full bg-transparent font-mono text-sm text-gray-1000 h-12 px-4 border border-[#343232c0] hover:border-[#555] focus:border-white focus:ring-2 focus:ring-white focus:outline-none uppercase pr-[72px]" v-model="form.promoCode">
+            <input :class="INPUT_BASE_CLASS + ' uppercase pr-[72px]'" v-model="form.promoCode">
             <div class="absolute right-0 top-0 h-full flex items-center pr-4">
               <button type="button" class="text-gray-500 hover:text-gray-1000 font-normal font-mono text-sm">Apply</button>
             </div>
@@ -157,7 +156,7 @@
         </div>
       </div>
 
-      <!-- 步骤3: Order summary (xl:hidden) -->
+      <!-- Step 3: Order summary (xl:hidden) -->
       <div class="w-full flex flex-col gap-6 xl:hidden">
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-4 lg:flex-row lg:items-center">
@@ -168,68 +167,24 @@
         <div class="flex flex-col gap-5 w-full">
           <div class="flex gap-3">
             <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal flex-1">Early bird in-person ticket</p>
-            <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal"><span class="text-gray-500 line-through">$250 USD</span> <span class="text-gray-1000">$125 USD</span></p>
+            <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal"><span class="text-gray-500 line-through">{{ formatPrice(TICKET_ORIGINAL_PRICE, ' USD') }}</span> <span class="text-gray-1000">{{ formatPrice(TICKET_SALE_PRICE, ' USD') }}</span></p>
           </div>
           <div class="flex gap-3">
             <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal flex-1 uppercase">Sub total</p>
-            <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal"><span class="text-gray-500 line-through">$250.00 USD</span> <span class="text-gray-1000">$125.00 USD</span></p>
+            <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal"><span class="text-gray-500 line-through">{{ formatPrice(TICKET_ORIGINAL_PRICE) }} USD</span> <span class="text-gray-1000">{{ formatPrice(TICKET_SALE_PRICE) }} USD</span></p>
           </div>
         </div>
       </div>
 
       <!-- Checkboxes + Complete purchase -->
       <div class="flex flex-col gap-5">
-        <!-- 自定义 SVG 对勾复选框 1 -->
-        <label class="text-[13px] inline-flex items-start cursor-pointer">
-          <div class="relative w-4 h-4 mt-1 mr-2">
-            <input 
-              type="checkbox" 
-              v-model="form.termsAccepted"
-              class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
-            />
-            <div 
-              class="w-4 h-4 rounded border border-[#555] bg-[#333] flex items-center justify-center transition-colors"
-              :class="form.termsAccepted ? 'bg-white border-white' : ''"
-            >
-              <svg fill="none" height="16" viewBox="0 0 20 20" width="16" class="scale-75">
-                <path 
-                  d="M14 7L8.5 12.5L6 10" 
-                  stroke-linecap="round" 
-                  stroke-linejoin="round" 
-                  stroke-width="2"
-                  :class="form.termsAccepted ? 'stroke-black' : 'stroke-transparent'"
-                />
-              </svg>
-            </div>
-          </div>
-          <span class="text-sm text-gray-400 pt-[3px] text-pretty leading-normal">I have read and agree to the <a href="https://vercel.com/legal/event-terms-conditions" target="_blank" class="underline underline-offset-2 decoration-gray-600">Event Terms and Conditions</a>.</span>
-        </label>
+        <Register_Checkbox v-model="form.termsAccepted">
+          I have read and agree to the <a href="https://vercel.com/legal/event-terms-conditions" target="_blank" class="underline underline-offset-2 decoration-gray-600">Event Terms and Conditions</a>.
+        </Register_Checkbox>
 
-        <!-- 自定义 SVG 对勾复选框 2 -->
-        <label class="text-[13px] inline-flex items-start cursor-pointer">
-          <div class="relative w-4 h-4 mt-1 mr-2">
-            <input 
-              type="checkbox" 
-              v-model="form.marketingComms"
-              class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
-            />
-            <div 
-              class="w-4 h-4 rounded border border-[#555] bg-[#333] flex items-center justify-center transition-colors"
-              :class="form.marketingComms ? 'bg-white border-white' : ''"
-            >
-              <svg fill="none" height="16" viewBox="0 0 20 20" width="16" class="scale-75">
-                <path 
-                  d="M14 7L8.5 12.5L6 10" 
-                  stroke-linecap="round" 
-                  stroke-linejoin="round" 
-                  stroke-width="2"
-                  :class="form.marketingComms ? 'stroke-black' : 'stroke-transparent'"
-                />
-              </svg>
-            </div>
-          </div>
-          <span class="text-sm text-gray-400 pt-[3px] text-pretty leading-normal">Yes, I agree to receive marketing communications from Vercel as described in your <a href="https://vercel.com/legal/privacy-policy" target="_blank" class="underline underline-offset-2 decoration-gray-600">Privacy Policy</a>. I can withdraw my consent at any time by clicking the unsubscribe link in the emails.</span>
-        </label>
+        <Register_Checkbox v-model="form.marketingComms">
+          Yes, I agree to receive marketing communications from Vercel as described in your <a href="https://vercel.com/legal/privacy-policy" target="_blank" class="underline underline-offset-2 decoration-gray-600">Privacy Policy</a>. I can withdraw my consent at any time by clicking the unsubscribe link in the emails.
+        </Register_Checkbox>
 
         <!-- Complete purchase -->
         <div
@@ -241,17 +196,17 @@
               <h3 class="text-base font-semibold" :class="form.termsAccepted && form.marketingComms ? 'text-black' : 'text-gray-1000'">Complete purchase</h3>
             </div>
             <div class="flex max-md:flex-col md:items-center gap-4">
-              <p class="max-w-[560px] font-mono text-sm line-through text-gray-500">$250.00</p>
+              <p class="max-w-[560px] font-mono text-sm line-through text-gray-500">{{ formatPrice(TICKET_ORIGINAL_PRICE) }}</p>
               <div class="min-w-[82px] px-3 py-2.5 font-mono text-center text-sm uppercase font-semibold"
                 :class="form.termsAccepted && form.marketingComms ? 'bg-black text-white' : 'bg-white text-black'"
-              >$125.00</div>
+              >{{ formatPrice(TICKET_SALE_PRICE) }}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 右侧 Order summary (xl only) -->
+    <!-- Order summary sidebar (xl only) -->
     <div class="hidden xl:block xl:max-w-[460px] 2xl:w-1/4 px-6 md:pr-8 md:pl-16 w-full max-w-[990px]">
       <div class="sticky top-14 py-10 md:py-20">
         <div class="flex flex-col gap-6 w-full items-start">
@@ -260,7 +215,7 @@
             <div class="flex flex-col gap-3">
               <div class="flex flex-col gap-3">
                 <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal">Early bird in-person ticket</p>
-                <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal"><span class="text-gray-500 line-through">$250 USD</span> <span class="text-gray-1000">$125 USD</span></p>
+                <p class="font-mono font-normal tracking-normal text-gray-400 text-sm leading-normal"><span class="text-gray-500 line-through">{{ formatPrice(TICKET_ORIGINAL_PRICE, ' USD') }}</span> <span class="text-gray-1000">{{ formatPrice(TICKET_SALE_PRICE, ' USD') }}</span></p>
               </div>
             </div>
           </div>
@@ -268,7 +223,7 @@
           <div class="flex flex-col gap-2 md:gap-4">
             <div class="flex flex-col gap-3">
               <p class="font-mono font-normal tracking-normal text-gray-400 text-sm lg:text-base leading-normal uppercase">Sub total</p>
-              <p class="font-mono font-normal tracking-normal text-gray-400 text-sm lg:text-base leading-normal"><span class="text-gray-500 line-through">$250.00 USD</span> <span class="text-gray-1000">$125.00 USD</span></p>
+              <p class="font-mono font-normal tracking-normal text-gray-400 text-sm lg:text-base leading-normal"><span class="text-gray-500 line-through">{{ formatPrice(TICKET_ORIGINAL_PRICE) }} USD</span> <span class="text-gray-1000">{{ formatPrice(TICKET_SALE_PRICE) }} USD</span></p>
             </div>
           </div>
           <button
@@ -291,13 +246,24 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useCityRoute } from '@/composables/useCityRoute'
+import { TICKET_ORIGINAL_PRICE, TICKET_SALE_PRICE, formatPrice } from '@/constants/tickets'
+import { INPUT_BASE_CLASS } from '@/constants/theme'
+import { CITIES } from '@/constants/cities'
+import Register_Checkbox from './Register_Checkbox.vue'
 
-const route = useRoute()
-const cityCode = computed(() => route.meta.code || 'LDN')
-const citySlug = computed(() => {
-  const parts = route.path.split('/')
-  return parts[2] || 'london'
+const { cityCode, citySlug } = useCityRoute()
+
+const cityMeta = computed(() => {
+  const slug = citySlug.value
+  return CITIES[slug] || CITIES.london
+})
+
+const cityLabel = computed(() => cityMeta.value.label)
+
+const cityDateDisplay = computed(() => {
+  const d = new Date(cityMeta.value.date)
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
 })
 
 const ticketType = ref('in-person')

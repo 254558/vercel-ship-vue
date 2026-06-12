@@ -12,12 +12,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useCityRoute } from '@/composables/useCityRoute'
 
-const route = useRoute()
-const citySlug = computed(() => {
-  const parts = route.path.split('/')
-  return parts[2] || 'london'
-})
+const { citySlug } = useCityRoute()
 </script>

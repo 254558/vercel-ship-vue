@@ -8,7 +8,7 @@
           </p>
           <div>
             <a
-              href="/ship/london/schedule"
+              :href="`/ship/${citySlug}/schedule`"
               class="inline-flex items-center justify-center gap-3 h-12 px-5 font-mono uppercase border border-[#343232c0] text-gray-1000 hover:bg-white/10 hover:border-[#555] active:bg-white/10 active:border-[#343232c0] select-none cursor-pointer whitespace-nowrap font-semibold"
             >
               Full schedule
@@ -55,6 +55,10 @@
 </template>
 
 <script setup>
+import { useCityRoute } from '@/composables/useCityRoute'
+
+const { citySlug } = useCityRoute()
+
 const sessions = [
   {
     title: 'Real-time voice agents with ElevenLabs and AI SDK',

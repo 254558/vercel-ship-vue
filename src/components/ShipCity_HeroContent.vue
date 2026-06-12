@@ -12,11 +12,11 @@
           <div class="flex flex-wrap items-center gap-8 font-mono text-base uppercase text-gray-1000">
             <div class="flex flex-col gap-[0.5px]">
               <span>MAGAZINE</span>
-              <span>LONDON</span>
+              <span>{{ cityLabel }}</span>
             </div>
 
             <div class="flex flex-col gap-1">
-              <span>JUNE 17</span>
+              <span>{{ cityDateDisplay }}</span>
               <span>{{ countDown }}</span>
             </div>
           </div>
@@ -51,30 +51,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { computed } from 'vue'
+import { useCityRoute } from '@/composables/useCityRoute'
+import { useCountdown } from '@/composables/useCountdown'
+import { CITIES } from '@/constants/cities'
 
-const countDown = ref('00D.00H.00M.00S')
-let timer = null
+const { citySlug } = useCityRoute()
 
-const TARGET_DATE = new Date('2026-06-17')
-
-function formatCountDown(diff) {
-  if (diff <= 0) return '00D.00H.00M.00S'
-  const d = Math.floor(diff / 86400000)
-  const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0')
-  const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0')
-  const s = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0')
-  return `${d}D.${h}H.${m}M.${s}S`
-}
-
-function updateTime() {
-  countDown.value = formatCountDown(TARGET_DATE - new Date())
-}
-
-onMounted(() => {
-  updateTime()
-  timer = setInterval(updateTime, 1000)
+const cityMeta = computed(() => CITIES[citySlug.value] || CITIES.london)
+const cityLabel = computed(() => cityMeta.value.label.toUpperCase())
+const cityDateDisplay = computed(() => {
+  const d = new Date(cityMeta.value.date)
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }).toUpperCase()
 })
 
-onUnmounted(() => clearInterval(timer))
+const targetDate = new Date(cityMeta.value.date)
+const { countDown } = useCountdown(targetDate)
 </script>

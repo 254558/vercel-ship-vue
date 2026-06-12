@@ -8,16 +8,7 @@
           <ShuffleText text="FAQ" />
         </nav>
 
-        <div class="flex items-center mr-17 gap-1">
-          <span class="text-[28px] font-semibold tracking-[-2px] font-geist-sans text-white">
-            Ship
-          </span>
-          <span
-            class="px-0.5 text-xs border-[1.5px] border-white rounded font-mono cursor-pointer tracking-tight font-semibold"
-          >
-            {{ cityCode }}
-          </span>
-        </div>
+        <ShipLogo :city-code="cityCode" />
 
         <nav class="flex items-center gap-8 font-geist-mono uppercase text-sm tracking-wider">
           <span class="hover:text-white transition-colors cursor-pointer inline-flex">
@@ -28,8 +19,8 @@
       </div>
     </header>
 
+    <ActorAnimation />
     <div class="relative h-[calc(100dvh-6rem)] flex flex-col shrink-0">
-      <ActorAnimation />
       <HeroContent />
     </div>
     <FeaturedSpeakers />
@@ -40,8 +31,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { useCityRoute } from '@/composables/useCityRoute'
+import ShipLogo from './ShipLogo.vue'
 import ShuffleText from './ShipCity_ShuffleText.vue'
 import HeroContent from './ShipCity_HeroContent.vue'
 import ActorAnimation from './ShipCity_HeroContent_ActorAnimation.vue'
@@ -50,6 +41,5 @@ import FeaturedSessions from './ShipCity_FeaturedSessions.vue'
 import CTA from './ShipCity_CTA.vue'
 import FAQ from './ShipCity_FAQ.vue'
 
-const route = useRoute()
-const cityCode = computed(() => route.meta.code || 'LDN')
+const { cityCode } = useCityRoute()
 </script>

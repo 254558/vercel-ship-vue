@@ -11,11 +11,9 @@
 
 <script setup>
 import { ref, onUnmounted } from 'vue'
+import { CHAR_POOL, SHUFFLE_CODE_MAX_STEPS, SHUFFLE_CODE_STEP_INTERVAL } from '@/constants/shuffle'
 
 const DEFAULT_TEXT = '26'
-const CHAR_POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const MAX_STEPS = 12
-const STEP_INTERVAL = 35
 
 const targetText = ref(DEFAULT_TEXT)
 const displayText = ref(DEFAULT_TEXT)
@@ -32,14 +30,14 @@ function startShuffle(finalText) {
   let step = 0
 
   shuffleTimer = setInterval(() => {
-    if (step < MAX_STEPS) {
+    if (step < SHUFFLE_CODE_MAX_STEPS) {
       displayText.value = randomChars(finalText.length)
       step++
     } else {
       displayText.value = finalText
       clearInterval(shuffleTimer)
     }
-  }, STEP_INTERVAL)
+  }, SHUFFLE_CODE_STEP_INTERVAL)
 }
 
 function resetShuffle() {

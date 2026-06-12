@@ -6,7 +6,7 @@
           Featured speakers
         </h2>
         <a
-          href="/ship/london/speakers"
+          :href="`/ship/${citySlug}/speakers`"
           class="inline-flex items-center gap-3 h-12 px-5 font-mono uppercase border border-white text-white hover:bg-white/10"
         >
           View all speakers
@@ -54,7 +54,9 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useCityRoute } from '@/composables/useCityRoute'
 
+const { citySlug } = useCityRoute()
 const activeIndex = ref(0)
 
 const speakers = [

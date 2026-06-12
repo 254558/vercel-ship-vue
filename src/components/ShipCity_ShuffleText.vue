@@ -10,6 +10,7 @@
 
 <script setup>
 import { ref, onUnmounted } from 'vue'
+import { CHAR_POOL, SHUFFLE_TEXT_FRAME_RATE, SHUFFLE_TEXT_DELAY_PER_CHAR, SHUFFLE_TEXT_DURATION } from '@/constants/shuffle'
 
 const props = defineProps({
   text: { type: String, required: true }
@@ -17,11 +18,6 @@ const props = defineProps({
 
 const showChars = ref(props.text.split(''))
 let shuffleTimer = null
-
-const CHAR_POOL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const FRAME_RATE = 30
-const DELAY_PER_CHAR = 1
-const SHUFFLE_DURATION = 2
 
 function startShuffle() {
   clearInterval(shuffleTimer)
@@ -36,8 +32,8 @@ function startShuffle() {
     let allFinished = true
 
     showChars.value = originArr.map((ch, idx) => {
-      const startFrame = idx * DELAY_PER_CHAR
-      const endFrame = startFrame + SHUFFLE_DURATION
+      const startFrame = idx * SHUFFLE_TEXT_DELAY_PER_CHAR
+      const endFrame = startFrame + SHUFFLE_TEXT_DURATION
 
       if (ticks < startFrame) return ch
       if (ticks < endFrame) {
@@ -49,10 +45,10 @@ function startShuffle() {
 
     ticks++
 
-    if (allFinished && ticks > len * DELAY_PER_CHAR + SHUFFLE_DURATION) {
+    if (allFinished && ticks > len * SHUFFLE_TEXT_DELAY_PER_CHAR + SHUFFLE_TEXT_DURATION) {
       clearInterval(shuffleTimer)
     }
-  }, FRAME_RATE)
+  }, SHUFFLE_TEXT_FRAME_RATE)
 }
 
 function resetShuffle() {
