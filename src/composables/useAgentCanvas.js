@@ -5,6 +5,7 @@ import {
   IDLE_PROBABILITY, FACE_SHOW_PROBABILITY, FACE_DURATION_MIN, FACE_DURATION_RANGE,
   pick,
 } from '@/constants/agentConfig'
+import { decodeAnimatedWebPFallback } from '@/composables/decodeWebPAnimation'
 
 const IMG_W = 166
 const IMG_H = 124
@@ -43,7 +44,18 @@ async function decodeAnimation(url) {
     }
   }
 
-  // Fallback: load as static image
+  // Fallback: try animated WebP decoder for Safari
+  try {
+    const decoded = await decodeAnimatedWebPFallback(fullUrl)
+    if (decoded) {
+      animCache.set(fullUrl, decoded)
+      return decoded
+    }
+  } catch (e) {
+    console.warn('Animated WebP decoder failed, falling back to static:', fullUrl, e)
+  }
+
+  // Last resort: load as static image
   const bitmap = await new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = () => createImageBitmap(img).then(resolve, reject)
