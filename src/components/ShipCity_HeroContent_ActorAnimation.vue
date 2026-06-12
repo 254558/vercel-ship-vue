@@ -1,7 +1,7 @@
 <template>
   <canvas
     ref="canvasRef"
-    class="absolute top-0 left-0 w-full pointer-events-none"
+    class="absolute top-0 left-0 w-full pointer-events-none z-50"
     :style="{ imageRendering: 'pixelated', height: pageHeight + 'px' }"
   />
 </template>
